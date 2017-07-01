@@ -1,0 +1,13 @@
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\ItemList\bin\Release\ItemList.exe.config
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\ItemList\bin\Release\ItemList.exe
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\ItemList\obj\Release\ItemList.csprojResolveAssemblyReference.cache
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\ItemList\obj\Release\View\MainView.g.cs
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\ItemList\obj\Release\App.g.cs
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\ItemList\obj\Release\GeneratedInternalTypeHelper.g.cs
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\ItemList\obj\Release\ItemList_MarkupCompile.cache
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\ItemList\obj\Release\ItemList_MarkupCompile.lref
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\ItemList\obj\Release\View\MainView.baml
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\ItemList\obj\Release\ItemList.g.resources
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\ItemList\obj\Release\ItemList.Properties.Resources.resources
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\ItemList\obj\Release\ItemList.csproj.GenerateResource.Cache
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\ItemList\obj\Release\ItemList.exe

@@ -1,0 +1,122 @@
+﻿<Window x:Class="ItemList.View.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:ItemList.ViewModel"
+        xmlns:cm="clr-namespace:ItemList.Common"
+        Title="MainView" Height="600" Width="800">
+    <Window.DataContext>
+        <vm:MainViewModel />
+    </Window.DataContext>
+    <Window.Resources>
+        <CollectionViewSource x:Key="categorySource" Source="{Binding Categorys}" />
+    </Window.Resources>
+    <Grid ShowGridLines="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="67*"/>
+            <RowDefinition Height="224*"/>
+            <RowDefinition Height="33*"/>
+            <RowDefinition Height="46*"/>
+        </Grid.RowDefinitions>
+
+        <Grid ShowGridLines="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150*"/>
+                <ColumnDefinition Width="112*"/>
+                <ColumnDefinition Width="129*"/>
+                <ColumnDefinition Width="99*"/>
+                <ColumnDefinition Width="102*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="textBlock1" TextWrapping="Wrap" Text="{Binding Dt}"/>
+            <Button x:Name="button2" Content="日付更新" Grid.Column="4" Command="{Binding RefreshDtCommand, Mode=OneWay}" />
+
+            <TextBlock x:Name="textBlock" Grid.Row="1" TextWrapping="Wrap" Text="商品名" />
+            <TextBox x:Name="textBox" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" Text="{Binding SearchStr, UpdateSourceTrigger=PropertyChanged}"
+                     cm:ExecuteCommandBehavior.Command="{Binding ShowMsg}"/>
+            <TextBlock x:Name="textBlock3" Grid.Row="1" Grid.Column="2" TextWrapping="Wrap" Text="{Binding SearchStr}"/>
+            <Button x:Name="button1" Content="検索" Grid.Row="1" Grid.Column="4" Command="{Binding SearchItemNameCommand, Mode=OneWay}"/>
+
+            <Label x:Name="label1" Content="カテゴリ" Grid.Row="2"/>
+            <ComboBox x:Name="comboBox" Grid.Row="2" ItemsSource="{Binding Mode=OneWay, Source={StaticResource categorySource}}" SelectedItem="{Binding SearchCategory}" Grid.Column="1" />
+
+
+
+        </Grid>
+
+        <!--自動生成-->
+        <!-- <DataGrid x:Name="dataGrid" Grid.Row="1" ItemsSource="{Binding Path=Items}"/>-->
+        <ScrollViewer Grid.Row="1">
+            <DataGrid x:Name="dataGrid"  ItemsSource="{Binding Path=Items}" AutoGenerateColumns="False" cm:ExecuteCommandBehavior.Command="{Binding ReCalcCommand}">
+                <DataGrid.Resources>
+                    <cm:ExecuteCommandBehavior x:Key="cb" />
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="商品名" Binding="{Binding ItemName}" />
+                    <DataGridComboBoxColumn Header="カテゴリ" ItemsSource="{Binding Mode=OneWay, Source={StaticResource categorySource}}" SelectedValueBinding="{Binding Category}" >
+                        <DataGridComboBoxColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}" >
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Category}" Value="未分類" >
+                                        <Setter Property="Background" Value="Gray" />
+                                        <Setter Property="Foreground" Value="White" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Category}" Value="食品" >
+                                        <Setter Property="Background" Value="Coral" />
+                                        <Setter Property="Foreground" Value="White" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Category}" Value="生活用品" >
+                                        <Setter Property="Background" Value="DarkKhaki" />
+                                        <Setter Property="Foreground" Value="Red" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Category}" Value="雑貨" >
+                                        <Setter Property="Background" Value="Azure" />
+                                        <Setter Property="Foreground" Value="Blue" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridComboBoxColumn.CellStyle>
+                    </DataGridComboBoxColumn>
+
+                    <DataGridTextColumn Header="価格" Binding="{Binding Price, UpdateSourceTrigger=PropertyChanged, StringFormat=#\,0}" />
+                    <DataGridTextColumn Header="作成者" Binding="{Binding CreateUser, UpdateSourceTrigger=PropertyChanged}"  />
+                    <DataGridCheckBoxColumn Header="削除フラグ" Binding="{Binding DeleteFlg}" />
+
+
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
+        <Grid Grid.Row="3" ShowGridLines="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="107*"/>
+                <ColumnDefinition Width="107*"/>
+                <ColumnDefinition Width="416*"/>
+                <ColumnDefinition Width="138*"/>
+                <ColumnDefinition Width="24*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button x:Name="addRowButton" Content="行追加" Grid.Row="1" Command="{Binding AddRowCommand}" ToolTip="15行までしか押せないよ"/>
+            <Button x:Name="priceUpButton" Content="値上げ" Grid.Row="1" Command="{Binding PriceUpCommand}" Grid.Column="1"/>
+            <Button x:Name="button" Content="Hello!" Grid.Column="3" Command="{Binding ShowMsg, Mode=OneWay}" Grid.Row="1"  />
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="90*"/>
+                <ColumnDefinition Width="99*"/>
+                <ColumnDefinition Width="403*"/>
+            </Grid.ColumnDefinitions>
+            <Label x:Name="label" Content="合計金額"/>
+            <TextBlock x:Name="textBlock2" Grid.Column="1" TextWrapping="Wrap" Text="{Binding TotalPrice}"/>
+        </Grid>
+
+
+    </Grid>
+
+</Window>

@@ -1,0 +1,15 @@
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\sample\bin\Release\sample.exe.config
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\sample\bin\Release\sample.exe
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\sample\bin\Release\sample.pdb
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\sample\obj\Release\hogehoge.csprojResolveAssemblyReference.cache
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\sample\obj\Release\MainWindow.g.cs
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\sample\obj\Release\App.g.cs
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\sample\obj\Release\GeneratedInternalTypeHelper.g.cs
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\sample\obj\Release\sample_MarkupCompile.cache
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\sample\obj\Release\sample_MarkupCompile.lref
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\sample\obj\Release\MainWindow.baml
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\sample\obj\Release\sample.g.resources
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\sample\obj\Release\sample.Properties.Resources.resources
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\sample\obj\Release\hogehoge.csproj.GenerateResource.Cache
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\sample\obj\Release\sample.exe
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\sample\obj\Release\sample.pdb

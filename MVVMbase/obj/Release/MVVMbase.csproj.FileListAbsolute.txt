@@ -1,0 +1,15 @@
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\MVVMbase\bin\Release\MVVMbase.exe.config
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\MVVMbase\bin\Release\MVVMbase.exe
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\MVVMbase\bin\Release\MVVMbase.pdb
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\MVVMbase\obj\Release\MVVMbase.csprojResolveAssemblyReference.cache
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\MVVMbase\obj\Release\View\MainView.g.cs
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\MVVMbase\obj\Release\App.g.cs
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\MVVMbase\obj\Release\GeneratedInternalTypeHelper.g.cs
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\MVVMbase\obj\Release\MVVMbase_MarkupCompile.cache
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\MVVMbase\obj\Release\MVVMbase_MarkupCompile.lref
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\MVVMbase\obj\Release\View\MainView.baml
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\MVVMbase\obj\Release\MVVMbase.g.resources
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\MVVMbase\obj\Release\MVVMbase.Properties.Resources.resources
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\MVVMbase\obj\Release\MVVMbase.csproj.GenerateResource.Cache
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\MVVMbase\obj\Release\MVVMbase.exe
+C:\Users\user\Documents\Visual Studio 2015\Projects\WpfApp2\MVVMbase\obj\Release\MVVMbase.pdb

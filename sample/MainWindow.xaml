@@ -1,0 +1,115 @@
+﻿<Window x:Class="hogehoge.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Width="200" SizeToContent="Height" Title="ウィンドウ名">
+
+    <StackPanel x:Name="panel" Canvas.Left="200" xmlns:local="clr-namespace:hogehoge">
+
+        <StackPanel.Resources>
+            <XmlDataProvider x:Key="Pages" XPath="Pages">
+                <x:XData>
+                    <Pages xmlns="">
+                        <Page Title="タイトル１" Url ="abc" />
+                        <Page Title="タイトル２" Url ="ddd" />
+                        <Page Title="タイトル３" Url ="eeff" />
+                    </Pages>
+                </x:XData>
+            </XmlDataProvider>
+            <local:DegreeToRadianConverter x:Key="DegToRad"/>
+        </StackPanel.Resources>
+
+        <DataGrid ItemsSource="{Binding Path=コンテンツ}"
+            IsSynchronizedWithCurrentItem="True" />
+        
+        <TextBlock Text="{Binding X}" Background="{DynamicResource {x:Static SystemColors.InfoBrushKey}}" />
+        <TextBlock Text="{Binding Y}" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" />
+        <TextBlock Text="{Binding 管理者.姓}"/>
+        <TextBlock Text="{Binding コンテンツ[1].URL}"/>
+        <TextBlock Text="{Binding ElementName=panel, Path=(Canvas.Left)}"/>
+
+        <TextBlock Text="{Binding Path=コンテンツ/MEMO}"  />
+
+        <TextBlock Text="{Binding Source={x:Static Application.Current},Path=StartupUri}" />
+
+        <!--バインディング・ソースがXMLデータの場合-->
+        <ListBox ItemsSource="{Binding Source={StaticResource Pages}, XPath=Page}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding XPath=@Title}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!--他のUI要素の参照-->
+        <StackPanel>
+            <TextBox x:Name="textValue" />
+            <Slider Value="{Binding ElementName=textValue, Path=Text}" />
+        </StackPanel>
+
+        <!-- 先祖をたどって<Window>要素を見つけ、そのTitleプロパティとバインディング -->
+        <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=Title}" />
+
+        <!-- 自分自身のWidthプロパティとHeightプロパティをバインディング（要するに、正方形にする） -->
+        <Rectangle Fill="Blue" Width="50" Height="{Binding RelativeSource={RelativeSource Self}, Path=Width}" />
+
+        <!--度と弧度を変換-->
+        <Slider x:Name="slider" Value="0" Minimum="0" Maximum="360" />
+        <TextBox Text="{Binding ElementName=slider, Path=Value}" />
+        <TextBox Text="{Binding ElementName=slider, Path=Value,
+           Converter={StaticResource DegToRad}}" />
+
+        <!--データ・テンプレート適用なし-->
+        <ContentControl Content="{Binding sample.Body}" />
+        <!--データ・テンプレートの自動適用-->
+        <!--ContentTemplateプロパティにデータ・テンプレートを渡さない方法-->
+        <Grid xmlns:exp="clr-namespace:System.Linq.Expressions;assembly=System.Core">
+            <Grid.Resources>
+
+                <DataTemplate DataType="{x:Type exp:BinaryExpression}">
+                    <StackPanel Orientation="Horizontal">
+
+                        <TextBlock Text="{Binding NodeType}" 
+                   Background="LightBlue" />
+
+                        <TextBlock Text=": " />
+
+                        <TextBlock Text="{Binding Left}" 
+                   Background="LightBlue" />
+
+                        <TextBlock Text=", " />
+
+                        <TextBlock Text="{Binding Right}" 
+                   Background="LightBlue" />
+
+                    </StackPanel>
+                </DataTemplate>
+
+            </Grid.Resources>
+
+            <ContentControl Content="{Binding sample.Body}" />
+        </Grid>
+        <!--データソースがコレクションの場合-->
+        <Grid xmlns:exp="clr-namespace:System.Linq.Expressions;assembly=System.Core">
+            <Grid.Resources>
+
+                <DataTemplate DataType="{x:Type exp:ParameterExpression}">
+                    <StackPanel Orientation="Horizontal">
+
+                        <TextBlock Text="{Binding Name}" 
+                   Background="LightPink" />
+
+                        <TextBlock Text=":" />
+
+                        <TextBlock Text="{Binding Type.Name}" 
+                   Background="Gainsboro" />
+
+                    </StackPanel>
+                </DataTemplate>
+
+            </Grid.Resources>
+
+            <ItemsControl ItemsSource="{Binding sample.Parameters}" />
+        </Grid>
+    </StackPanel>
+
+</Window>
