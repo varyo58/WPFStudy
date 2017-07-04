@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp2", "WpfApp2\WpfApp2.csproj", "{38D78EA3-BF42-4BF6-9A55-3C4782D1B00B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hogehoge", "sample\hogehoge.csproj", "{2E10FD5C-30AD-4A5C-809F-C075AA0784B5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommnadTest", "CommnadTest\CommnadTest.csproj", "{BBFEBDF2-74A8-446F-8A95-E58AEF4476F8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenseIt", "ExpenseIt\ExpenseIt.csproj", "{A1291212-C39A-496A-893C-BAC66D57E5F3}"
@@ -27,22 +23,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{38D78EA3-BF42-4BF6-9A55-3C4782D1B00B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{38D78EA3-BF42-4BF6-9A55-3C4782D1B00B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{38D78EA3-BF42-4BF6-9A55-3C4782D1B00B}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{38D78EA3-BF42-4BF6-9A55-3C4782D1B00B}.Debug|x86.Build.0 = Debug|Any CPU
-		{38D78EA3-BF42-4BF6-9A55-3C4782D1B00B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{38D78EA3-BF42-4BF6-9A55-3C4782D1B00B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{38D78EA3-BF42-4BF6-9A55-3C4782D1B00B}.Release|x86.ActiveCfg = Release|Any CPU
-		{38D78EA3-BF42-4BF6-9A55-3C4782D1B00B}.Release|x86.Build.0 = Release|Any CPU
-		{2E10FD5C-30AD-4A5C-809F-C075AA0784B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E10FD5C-30AD-4A5C-809F-C075AA0784B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2E10FD5C-30AD-4A5C-809F-C075AA0784B5}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{2E10FD5C-30AD-4A5C-809F-C075AA0784B5}.Debug|x86.Build.0 = Debug|Any CPU
-		{2E10FD5C-30AD-4A5C-809F-C075AA0784B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E10FD5C-30AD-4A5C-809F-C075AA0784B5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2E10FD5C-30AD-4A5C-809F-C075AA0784B5}.Release|x86.ActiveCfg = Release|Any CPU
-		{2E10FD5C-30AD-4A5C-809F-C075AA0784B5}.Release|x86.Build.0 = Release|Any CPU
 		{BBFEBDF2-74A8-446F-8A95-E58AEF4476F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BBFEBDF2-74A8-446F-8A95-E58AEF4476F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBFEBDF2-74A8-446F-8A95-E58AEF4476F8}.Debug|x86.ActiveCfg = Debug|Any CPU

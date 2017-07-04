@@ -13,12 +13,12 @@ namespace ItemListLivet.ViewModels
     {
 
 
-        public SubWindowViewModel(Item item)
+        public SubWindowViewModel(int id)
         {
-            this.Item = item;
+            this.Item = Item.getItemById(id);
         }
 
-        private Item origin;
+        //private Item origin;
         private Item item;
         public Item Item
         {
@@ -28,12 +28,7 @@ namespace ItemListLivet.ViewModels
             }
             set
             {
-                if( origin == value)
-                {
-                    return;
-                }
-                origin = value;
-                this.item = new Item() { ItemName = origin.ItemName, Category = origin.Category, Price = origin.Price, CreateUser = origin.CreateUser };
+                this.item = value;
                 RaisePropertyChanged("Item");
             }
         }
@@ -63,10 +58,12 @@ namespace ItemListLivet.ViewModels
 
         public void Update()
         {
-            origin.ItemName = item.ItemName;
-            origin.Category = item.Category;
-            origin.Price = item.Price;
-            origin.CreateUser = item.CreateUser;
+            //origin.ItemName = item.ItemName;
+            //origin.Category = item.Category;
+            //origin.Price = item.Price;
+            //origin.CreateUser = item.CreateUser;
+
+            Item.updateItem(this.Item.Id, this.Item.ItemName, this.Item.Category.ToString(), this.Item.Price, this.Item.CreateUser);
 
             Messenger.Raise(new WindowActionMessage(WindowAction.Close, "Close"));
 

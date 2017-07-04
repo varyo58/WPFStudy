@@ -18,6 +18,18 @@ namespace ItemListLivet.Views
         public MainWindow()
         {
             InitializeComponent();
+
+            // WindowのClosingイベントハンドラを追加
+            this.Closing += (o, e) =>
+            {
+                MessageBoxResult mr = MessageBox.Show("終了しますか？", "確認", MessageBoxButton.YesNo);
+                e.Cancel = mr == MessageBoxResult.No;
+            };
+            this.Closed += (o, e) =>
+            {
+                MessageBox.Show("お疲れ様でした。");
+            };
         }
+        
     }
 }

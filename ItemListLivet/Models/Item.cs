@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using Livet;
+using System.Data.SqlClient;
 
 namespace ItemListLivet.Model
 {
@@ -19,6 +20,8 @@ namespace ItemListLivet.Model
 
     public class Item : NotificationObject
     {
+        public int Id { get; set; }
+
         private string itemName;
         public string ItemName {
             get
@@ -135,8 +138,150 @@ namespace ItemListLivet.Model
                 new Item("商品D", Category.食品, 600, "高知"),
 
             };
-            return list;
+
+            //            getItemById(2);
+            //updateItem(2, "商品名ににに", "かてごり", 999, "hoge");
+
+            return getItemListFromDB();
+            //return list;
         }
+
+        public static List<Item> getItemListFromDB()
+        {
+            var list = new List<Item>();
+
+            String constr = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\user\\Documents\\Visual Studio 2015\\test.mdf\";Integrated Security=True;Connect Timeout=30";
+            SqlConnection con = new SqlConnection(constr);
+            con.Open();
+            try
+            {
+                String sqlstr = "select * from Item";
+                SqlCommand com = new SqlCommand(sqlstr, con);
+                SqlDataReader sdr = com.ExecuteReader();
+
+                while(sdr.Read() == true)
+                {
+
+                    int id = (int)sdr["id"];
+                    String itemName = (String)sdr["itemName"];
+                    int price = (int)sdr["price"];
+                    String categoryStr = (String)sdr["category"];
+                    Category category;
+                    switch (categoryStr)
+                    {
+                        case "食品":
+                            category = Category.食品;
+                            break;
+                        case "雑貨":
+                            category = Category.雑貨;
+                            break;
+                        case "生活用品":
+                            category = Category.生活用品;
+                            break;
+                        default:
+                            category = Category.未分類;
+                            break;
+                    }
+                    String createUser = (String)sdr["createUser"];
+                    list.Add(new Item { Id = id, ItemName = itemName, Category = category, Price = price, CreateUser = createUser });
+                }
+            }
+            finally
+            {
+                con.Close();
+            }
+
+            return list;
+
+        }
+
+
+        public static Item getItemById(int searchId)
+        {
+            Item item = null;
+
+            String constr = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\user\\Documents\\Visual Studio 2015\\test.mdf\";Integrated Security=True;Connect Timeout=30";
+            SqlConnection con = new SqlConnection(constr);
+            con.Open();
+            try
+            {
+                
+                SqlCommand com = con.CreateCommand();
+                com.CommandText = @"select * from Item where id = @ID";
+                com.Parameters.Add(new SqlParameter("@ID", searchId));
+                SqlDataReader sdr = com.ExecuteReader();
+                while (sdr.Read() == true)
+                {
+
+                    int id = (int)sdr["id"];
+                    String itemName = (String)sdr["itemName"];
+                    int price = (int)sdr["price"];
+                    String categoryStr = (String)sdr["category"];
+                    Category category;
+                    switch (categoryStr)
+                    {
+                        case "食品":
+                            category = Category.食品;
+                            break;
+                        case "雑貨":
+                            category = Category.雑貨;
+                            break;
+                        case "生活用品":
+                            category = Category.生活用品;
+                            break;
+                        default:
+                            category = Category.未分類;
+                            break;
+                    }
+                    String createUser = (String)sdr["createUser"];
+
+                    item = new Item();
+                    item.Id = id;
+                    item.ItemName = itemName;
+                    item.Category = category;
+                    item.Price = price;
+                    item.CreateUser = createUser;
+                }
+            }
+            finally
+            {
+                con.Close();
+            }
+
+            return item == null ? null : item;
+
+        }
+
+        public static void updateItem(int id, String itemName, string category, int price, String createUser)
+        {
+
+            String constr = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\user\\Documents\\Visual Studio 2015\\test.mdf\";Integrated Security=True;Connect Timeout=30";
+            SqlConnection con = new SqlConnection(constr);
+            con.Open();
+            try
+            {
+
+                SqlCommand com = con.CreateCommand();
+                com.CommandText = @"update Item set itemName = @ItemName, category = @Category, price = @Price, createUser = @CreateUser where id = @Id";
+
+                com.Parameters.Add(new SqlParameter("@ItemName", itemName));
+                com.Parameters.Add(new SqlParameter("@Category", category));
+                com.Parameters.Add(new SqlParameter("@Price", price));
+                com.Parameters.Add(new SqlParameter("@CreateUser", createUser));
+                com.Parameters.Add(new SqlParameter("@Id", id));
+                
+                int count = com.ExecuteNonQuery();
+
+            }
+            finally
+            {
+                con.Close();
+            }
+
+            return;
+
+        }
+
 
         public static List<Category> getCategoryList()
         {

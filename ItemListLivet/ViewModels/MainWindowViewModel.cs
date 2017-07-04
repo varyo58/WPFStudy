@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.ComponentModel;
 
 using Livet;
 using Livet.Commands;
 using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
-
-using ItemListLivet.Models;
 using ItemListLivet.Model;
 using System.Windows.Data;
 using System.Windows;
@@ -27,8 +20,8 @@ namespace ItemListLivet.ViewModels
         }
         private void init()
         {
-            dt = DateTime.Now;
-            items = new Items();
+            Dt = DateTime.Now;
+            Items = new Items();
             SearchCategory = "";
         }
 
@@ -130,6 +123,17 @@ namespace ItemListLivet.ViewModels
         //コマンド
 
         /// <summary>
+        /// データを再検索してリセットするコマンド
+        /// </summary>
+        public ViewModelCommand ReSearchCommand
+        {
+            get
+            {
+                return new ViewModelCommand(init);
+            }
+        }
+
+        /// <summary>
         /// 行追加コマンド
         /// </summary>
         public ViewModelCommand AddRowCommand
@@ -199,26 +203,26 @@ namespace ItemListLivet.ViewModels
         }
         private void searchItems()
         {
-            var collectionView = CollectionViewSource.GetDefaultView(this.Items.ItemList);
-            collectionView.Filter = x =>
-            {
-                var item = (Item)x;
-                bool checkItemName;
-                checkItemName = SearchStr == null || item.ItemName == null ? true : item.ItemName.Contains(SearchStr);
+            //var collectionView = CollectionViewSource.GetDefaultView(this.Items.ItemList);
+            //collectionView.Filter = x =>
+            //{
+            //    var item = (Item)x;
+            //    bool checkItemName;
+            //    checkItemName = SearchStr == null || item.ItemName == null ? true : item.ItemName.Contains(SearchStr);
 
-                bool checkCategory;
-                if (searchCategory.Equals(""))
-                {
-                    checkCategory = true;
-                }
-                else
-                {
-                    Category c = (Category)Enum.Parse(typeof(Category), searchCategory);
-                    checkCategory = item == null ? true : c.Equals(item.Category);
-                }
+            //    bool checkCategory;
+            //    if (searchCategory.Equals(""))
+            //    {
+            //        checkCategory = true;
+            //    }
+            //    else
+            //    {
+            //        Category c = (Category)Enum.Parse(typeof(Category), searchCategory);
+            //        checkCategory = item == null ? true : c.Equals(item.Category);
+            //    }
 
-                return checkItemName && checkCategory;
-            };
+            //    return checkItemName && checkCategory;
+            //};
         }
 
         /// <summary>
@@ -271,7 +275,7 @@ namespace ItemListLivet.ViewModels
         {
             get
             {
-                if(openSubWindowCommand == null)
+                if (openSubWindowCommand == null)
                 {
                     openSubWindowCommand = new ViewModelCommand(openSubWindow, CanEdit);
                 }
@@ -290,9 +294,9 @@ namespace ItemListLivet.ViewModels
                 MessageBox.Show("行が選択されていません。", "キャプション");
                 return;
             }
-            
 
-            using (var vm = new SubWindowViewModel(this.Item))
+
+            using (var vm = new SubWindowViewModel(this.Item.Id))
             {
                 Messenger.Raise(new TransitionMessage(vm, "EditCommand"));
             }
@@ -301,6 +305,14 @@ namespace ItemListLivet.ViewModels
         public bool CanEdit()
         {
             return this.Item != null;
+        }
+
+        public ViewModelCommand ClosedCommand
+        {
+            get
+            {
+                return new ViewModelCommand(() => MessageBox.Show("Closedイベントをviewmodelで検知しました。"));
+            }
         }
 
     }

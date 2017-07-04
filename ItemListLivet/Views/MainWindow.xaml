@@ -14,6 +14,7 @@
     </Window.DataContext>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction Command="{Binding ClosedCommand}" />
             <l:DataContextDisposeAction/>
         </i:EventTrigger>
         <l:InteractionMessageTrigger MessageKey="EditCommand" Messenger="{Binding Messenger}">
@@ -21,6 +22,9 @@
                 WindowType="{x:Type v:SubWindow}" Mode="Modal" />
         </l:InteractionMessageTrigger>
     </i:Interaction.Triggers>
+    <i:Interaction.Behaviors>
+        <b:ApplicationCommandBehavior />
+    </i:Interaction.Behaviors>
     <Window.Resources>
         <CollectionViewSource x:Key="categorySource" Source="{Binding Categorys}" />
 
@@ -103,7 +107,8 @@
             <Label x:Name="label1" Content="カテゴリ:" Grid.Row="3" Grid.Column="1" Width="63"/>
             <ComboBox x:Name="comboBox" Grid.Row="3" ItemsSource="{Binding Mode=OneWay, Path=CategoryStrs}" SelectedItem="{Binding SearchCategory}" Grid.Column="2" />
            
-            <Button x:Name="button1" Content="検索" Grid.Row="3" Grid.Column="6" Command="{Binding SearchItemNameCommand, Mode=OneWay}" />
+            <!--<Button x:Name="button1" Content="検索" Grid.Row="3" Grid.Column="6" Command="{Binding SearchItemNameCommand, Mode=OneWay}" />-->
+            <Button x:Name="button1" Content="再検索" Grid.Row="3" Grid.Column="6" Command="{Binding ReSearchCommand, Mode=OneWay}" />
 
         </Grid>
 
