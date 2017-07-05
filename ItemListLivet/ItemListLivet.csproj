@@ -69,6 +69,7 @@
     <Compile Include="Behavior\ApplicationCommandBehavior.cs" />
     <Compile Include="Behavior\PlaceHolderBehavior.cs" />
     <Compile Include="Behavior\TextBoxBehaviors.cs" />
+    <Compile Include="ValidationRules\PriceValidationRule.cs" />
     <Compile Include="Views\SubWindow.xaml.cs">
       <DependentUpon>SubWindow.xaml</DependentUpon>
     </Compile>

@@ -22,12 +22,12 @@ namespace ItemListLivet.Views
             // WindowのClosingイベントハンドラを追加
             this.Closing += (o, e) =>
             {
-                MessageBoxResult mr = MessageBox.Show("終了しますか？", "確認", MessageBoxButton.YesNo);
+                MessageBoxResult mr = MessageBox.Show("終了しますか？", "WindowのClosingイベント", MessageBoxButton.YesNo);
                 e.Cancel = mr == MessageBoxResult.No;
             };
             this.Closed += (o, e) =>
             {
-                MessageBox.Show("お疲れ様でした。");
+                MessageBox.Show("お疲れ様でした。", "WindowのClosedイベント");
             };
         }
         

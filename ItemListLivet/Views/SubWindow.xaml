@@ -8,6 +8,7 @@
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
         xmlns:b="clr-namespace:ItemListLivet.Behavior"
+        xmlns:vr="clr-namespace:ItemListLivet.ValidationRules"
         mc:Ignorable="d"
         Height="300" Width="300">
     <Window.Style>
@@ -22,7 +23,16 @@
             </Style.Triggers>
         </Style>
     </Window.Style>
-
+    <Window.Resources>
+        <Style x:Key="TextBoxHasError" TargetType="{x:Type TextBox}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip"
+                    Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <i:Interaction.Triggers>
         <l:InteractionMessageTrigger MessageKey="Close" Messenger="{Binding Messenger}">
             <l:WindowInteractionMessageAction InvokeActionOnlyWhenWindowIsActive="False" />
@@ -58,7 +68,13 @@
             <Label x:Name="label1" Content="カテゴリ" Grid.Row="1"/>
             <ComboBox x:Name="comboBox" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Categorys}" SelectedValue="{Binding Item.Category}"/>
             <Label x:Name="label2" Content="価格" Grid.Row="2"/>
-            <TextBox x:Name="textBox1" Grid.Column="1" Grid.Row="2" TextWrapping="Wrap" Text="{Binding Item.Price, UpdateSourceTrigger=PropertyChanged}" b:TextBoxBehaviors.IsNumeric="True"/>
+            <TextBox x:Name="textBox1" Grid.Column="1" Grid.Row="2" TextWrapping="Wrap"  b:TextBoxBehaviors.IsNumeric="True" Style="{StaticResource TextBoxHasError}" >
+                <Binding Path="Item.Price" UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules>
+                        <vr:PriceValidationRule MinValue="0" MaxValue="9999" />
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox>
             <Label x:Name="label3" Content="作成者" Grid.Row="3"/>
             <TextBox x:Name="textBox3" Grid.Column="1" Grid.Row="3" TextWrapping="Wrap" Text="{Binding Item.CreateUser, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
