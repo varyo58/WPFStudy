@@ -39,18 +39,19 @@ namespace ItemListLivet.ViewModels
             }
         }
 
-        private Item item;
-        public Item Item
+        private Item selectedItem;
+        public Item SelectedItem
         {
             get
             {
-                return this.item;
+                return this.selectedItem;
             }
             set
             {
-                this.item = value;
+                this.selectedItem = value;
                 RaisePropertyChanged("Item");
-                this.OpenSubWindowCommand.RaiseCanExecuteChanged();
+                this.OpenEditWindowCommand.RaiseCanExecuteChanged();
+                this.DeleteItemCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -117,9 +118,6 @@ namespace ItemListLivet.ViewModels
         }
 
 
-
-
-
         //コマンド
 
         /// <summary>
@@ -129,9 +127,10 @@ namespace ItemListLivet.ViewModels
         {
             get
             {
-                return new ViewModelCommand(init);
+                return new ViewModelCommand(() => Items = new Items());
             }
         }
+
 
         /// <summary>
         /// 行追加コマンド
@@ -203,52 +202,26 @@ namespace ItemListLivet.ViewModels
         }
         private void searchItems()
         {
-            //var collectionView = CollectionViewSource.GetDefaultView(this.Items.ItemList);
-            //collectionView.Filter = x =>
-            //{
-            //    var item = (Item)x;
-            //    bool checkItemName;
-            //    checkItemName = SearchStr == null || item.ItemName == null ? true : item.ItemName.Contains(SearchStr);
-
-            //    bool checkCategory;
-            //    if (searchCategory.Equals(""))
-            //    {
-            //        checkCategory = true;
-            //    }
-            //    else
-            //    {
-            //        Category c = (Category)Enum.Parse(typeof(Category), searchCategory);
-            //        checkCategory = item == null ? true : c.Equals(item.Category);
-            //    }
-
-            //    return checkItemName && checkCategory;
-            //};
-        }
-
-        /// <summary>
-        /// チェックが入っている行を削除するコマンド
-        /// </summary>
-        public ViewModelCommand DeleteRowCommand
-        {
-            get
+            var collectionView = CollectionViewSource.GetDefaultView(this.Items.ItemList);
+            collectionView.Filter = x =>
             {
-                return new ViewModelCommand(deleteItem);
-            }
-        }
-        private void deleteItem()
-        {
-            Console.WriteLine("deleteRow");
-            // 削除フラグがたっているものを削除します
-            //foreach (Item item in this.Items.ItemList.Where(d => d.DeleteFlg).ToList())
-            //{
-            //    Items.ItemList.Remove(item);
-            //}
+                var item = (Item)x;
+                bool checkItemName;
+                checkItemName = SearchStr == null || item.ItemName == null ? true : item.ItemName.Contains(SearchStr);
 
-            if (MessageBox.Show("チェックされている行を削除します。", "キャプション", MessageBoxButton.YesNo) == MessageBoxResult.No)
-            {
-                return;
-            }
-            Items.removeItems();
+                bool checkCategory;
+                if (searchCategory.Equals(""))
+                {
+                    checkCategory = true;
+                }
+                else
+                {
+                    Category c = (Category)Enum.Parse(typeof(Category), searchCategory);
+                    checkCategory = item == null ? true : c.Equals(item.Category);
+                }
+
+                return checkItemName && checkCategory;
+            };
         }
 
         /// <summary>
@@ -268,44 +241,95 @@ namespace ItemListLivet.ViewModels
         }
 
         /// <summary>
-        /// サブウィンドウを開く
+        /// 編集用サブウィンドウを開く
         /// </summary>
-        private ViewModelCommand openSubWindowCommand;
-        public ViewModelCommand OpenSubWindowCommand
+        private ViewModelCommand openEditWindowCommand;
+        public ViewModelCommand OpenEditWindowCommand
         {
             get
             {
-                if (openSubWindowCommand == null)
+                if (openEditWindowCommand == null)
                 {
-                    openSubWindowCommand = new ViewModelCommand(openSubWindow, CanEdit);
+                    openEditWindowCommand = new ViewModelCommand(openEditWindow, CanEdit);
                 }
-                return openSubWindowCommand;
+                return openEditWindowCommand;
             }
         }
 
-        private void openSubWindow()
+        private void openEditWindow()
         {
-            var win = new SubWindow();
 
             // IsSelectの行を取得(DatagridのSelectionModeがsingleである前提)
             var index = this.Items.ItemList.Select((d, i) => new { Index = i, Item = d }).Where(d => d.Item.IsSelected).Select(i => i.Index).ToList();
-            if (this.Item == null)
+            if (this.SelectedItem == null)
             {
                 MessageBox.Show("行が選択されていません。", "キャプション");
                 return;
             }
 
-
-            using (var vm = new SubWindowViewModel(this.Item.Id))
+            using (var vm = new SubWindowViewModel(this.SelectedItem.Id))
             {
-                Messenger.Raise(new TransitionMessage(vm, "EditCommand"));
+                Messenger.Raise(new TransitionMessage(vm, TransitionMode.Modal, "EditCommand"));
+                init();
             }
-
         }
+
         public bool CanEdit()
         {
-            return this.Item != null;
+            return this.SelectedItem != null;
         }
+
+        /// <summary>
+        /// 新規用サブウィンドウを開く
+        /// </summary>
+        private ViewModelCommand openNewWindowCommand;
+        public ViewModelCommand OpenNewWindowCommand
+        {
+            get
+            {
+                if (openNewWindowCommand == null)
+                {
+                    openNewWindowCommand = new ViewModelCommand(openNewWindow);
+                }
+                return openNewWindowCommand;
+            }
+        }
+
+        private void openNewWindow()
+        {
+
+            using (var vm = new SubWindowViewModel())
+            {
+                Messenger.Raise(new TransitionMessage(vm, TransitionMode.Modal, "EditCommand"));
+                init();
+            }
+        }
+
+        /// <summary>
+        /// 選択行を削除する
+        /// </summary>
+        private ViewModelCommand deleteItemCommand;
+        public ViewModelCommand DeleteItemCommand
+        {
+            get
+            {
+                if (deleteItemCommand == null)
+                {
+                    deleteItemCommand = new ViewModelCommand(deleteItem, CanEdit);
+                }
+                return deleteItemCommand;
+            }
+        }
+
+        private void deleteItem()
+        {
+
+            Item.deleteItem(SelectedItem.Id);
+            SelectedItem = null;
+            init();
+
+        }
+
 
         public ViewModelCommand ClosedCommand
         {

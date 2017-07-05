@@ -19,7 +19,7 @@
         </i:EventTrigger>
         <l:InteractionMessageTrigger MessageKey="EditCommand" Messenger="{Binding Messenger}">
             <l:TransitionInteractionMessageAction 
-                WindowType="{x:Type v:SubWindow}" Mode="Modal" />
+                WindowType="{x:Type v:SubWindow}" />
         </l:InteractionMessageTrigger>
     </i:Interaction.Triggers>
     <i:Interaction.Behaviors>
@@ -28,7 +28,7 @@
     <Window.Resources>
         <CollectionViewSource x:Key="categorySource" Source="{Binding Categorys}" />
 
-       
+
         <Style TargetType="Label">
             <Setter Property="HorizontalAlignment" Value="Right"></Setter>
         </Style>
@@ -106,7 +106,7 @@
 
             <Label x:Name="label1" Content="カテゴリ:" Grid.Row="3" Grid.Column="1" Width="63"/>
             <ComboBox x:Name="comboBox" Grid.Row="3" ItemsSource="{Binding Mode=OneWay, Path=CategoryStrs}" SelectedItem="{Binding SearchCategory}" Grid.Column="2" />
-           
+
             <!--<Button x:Name="button1" Content="検索" Grid.Row="3" Grid.Column="6" Command="{Binding SearchItemNameCommand, Mode=OneWay}" />-->
             <Button x:Name="button1" Content="再検索" Grid.Row="3" Grid.Column="6" Command="{Binding ReSearchCommand, Mode=OneWay}" />
 
@@ -115,9 +115,9 @@
         <!--自動生成-->
         <!-- <DataGrid x:Name="dataGrid" Grid.Row="1" ItemsSource="{Binding Path=Items}"/>-->
         <ScrollViewer Grid.Row="2">
-            <DataGrid x:Name="dataGrid"  ItemsSource="{Binding Path=Items.ItemList}" SelectedItem="{Binding Item, Mode=TwoWay}" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid x:Name="dataGrid"  ItemsSource="{Binding Path=Items.ItemList}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" AutoGenerateColumns="False" IsReadOnly="True">
                 <DataGrid.Columns>
-                    
+
                     <DataGridTextColumn Header="商品名" Binding="{Binding ItemName}" />
                     <DataGridComboBoxColumn Header="カテゴリ" ItemsSource="{Binding Mode=OneWay, Source={StaticResource categorySource}}" SelectedValueBinding="{Binding Category}" CellStyle="{StaticResource categoryStyle}" />
                     <DataGridTextColumn Header="価格" Binding="{Binding Price, UpdateSourceTrigger=PropertyChanged}" />
@@ -148,8 +148,8 @@
                 <ColumnDefinition Width="123*"/>
                 <ColumnDefinition Width="126*"/>
                 <ColumnDefinition Width="125*"/>
-                <ColumnDefinition Width="39*"/>
                 <ColumnDefinition Width="125*"/>
+                <ColumnDefinition Width="39*"/>
                 <ColumnDefinition Width="60*"/>
                 <ColumnDefinition Width="174*"/>
                 <ColumnDefinition Width="10*"/>
@@ -160,12 +160,14 @@
                 <RowDefinition Height="25"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <Button x:Name="addRowButton" Content="行追加" Grid.Row="1" Command="{Binding AddRowCommand}" Grid.Column="1" ToolTip="30行までしか押せないよ"  />
+            <!--<Button x:Name="addRowButton" Content="行追加" Grid.Row="1" Command="{Binding AddRowCommand}" Grid.Column="1" ToolTip="30行までしか押せないよ"  />
             <Button x:Name="priceUpButton" Content="値上げ" Grid.Row="1" Command="{Binding PriceUpCommand}" Grid.Column="2" />
-            <Button x:Name="deleteButton" Content="削除" Grid.Row="1" Command="{Binding DeleteRowCommand}" Grid.Column="3"  />
+            <Button x:Name="deleteButton" Content="削除" Grid.Row="1" Command="{Binding DeleteRowCommand}" Grid.Column="3"  />-->
             <Button x:Name="button" Content="Hello!" Grid.Column="7" Command="{Binding ShowMsg, Mode=OneWay}" Grid.Row="1"   />
 
-            <Button x:Name="button3" Content="編集サブウィンドウ" Grid.Column="1" Grid.Row="2" Command="{Binding OpenSubWindowCommand}" />
+            <Button x:Name="button3" Content="選択行を編集" Grid.Column="1" Grid.Row="2" Command="{Binding OpenEditWindowCommand}" />
+            <Button x:Name="button5" Content="選択行を削除" Grid.Column="2" Grid.Row="2" Command="{Binding DeleteItemCommand}" />
+            <Button x:Name="button4" Content="新規作成" Grid.Column="4" Grid.Row="2" Command="{Binding OpenNewWindowCommand}" />
 
             <Button Content="とじる" Command="Close" Grid.Column="7" Grid.Row="2" />
         </Grid>

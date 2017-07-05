@@ -20,6 +20,9 @@ namespace ItemListLivet.Model
 
     public class Item : NotificationObject
     {
+        // SQLServer接続文字列
+        public static readonly String CONSTR = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\user\\Documents\\Visual Studio 2015\\test.mdf\";Integrated Security=True;Connect Timeout=30";
+
         public int Id { get; set; }
 
         private string itemName;
@@ -120,38 +123,40 @@ namespace ItemListLivet.Model
 
         public static List<Item> getItemList()
         {
-            var list = new List<Item>
-            {
-                new Item("商品１", Category.生活用品, 100, "小林"),
-                new Item("商品２", Category.食品, 200, "小林"),
-                new Item("商品３", Category.生活用品, 300, "小林"),
-                new Item("hoge", Category.未分類, 1, "ほげ"),
-                new Item("hoge", Category.雑貨, 2, "ほげ"),
-                new Item("hoge", Category.未分類, 3, "ほげ"),
-                new Item("hogehoge", Category.未分類, 10, "ほげ"),
-                new Item("ABC", Category.生活用品, 300, "小林"),
-                new Item("BBB", Category.生活用品, 300, "小林"),
-                new Item("CCC", Category.雑貨, 400, "こばやし"),
-                new Item("商品A", Category.生活用品, 300, "香川"),
-                new Item("商品B", Category.雑貨, 400, "徳島"),
-                new Item("商品C", Category.雑貨, 500, "愛媛"),
-                new Item("商品D", Category.食品, 600, "高知"),
+            //var list = new List<Item>
+            //{
+            //    new Item("商品１", Category.生活用品, 100, "小林"),
+            //    new Item("商品２", Category.食品, 200, "小林"),
+            //    new Item("商品３", Category.生活用品, 300, "小林"),
+            //    new Item("hoge", Category.未分類, 1, "ほげ"),
+            //    new Item("hoge", Category.雑貨, 2, "ほげ"),
+            //    new Item("hoge", Category.未分類, 3, "ほげ"),
+            //    new Item("hogehoge", Category.未分類, 10, "ほげ"),
+            //    new Item("ABC", Category.生活用品, 300, "小林"),
+            //    new Item("BBB", Category.生活用品, 300, "小林"),
+            //    new Item("CCC", Category.雑貨, 400, "こばやし"),
+            //    new Item("商品A", Category.生活用品, 300, "香川"),
+            //    new Item("商品B", Category.雑貨, 400, "徳島"),
+            //    new Item("商品C", Category.雑貨, 500, "愛媛"),
+            //    new Item("商品D", Category.食品, 600, "高知"),
 
-            };
+            //};
+
+            //return list;
 
             //            getItemById(2);
             //updateItem(2, "商品名ににに", "かてごり", 999, "hoge");
+            //insertItem("dummy", "kategori", 999, "sakuseisya");
 
             return getItemListFromDB();
-            //return list;
+
         }
 
         public static List<Item> getItemListFromDB()
         {
             var list = new List<Item>();
 
-            String constr = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\user\\Documents\\Visual Studio 2015\\test.mdf\";Integrated Security=True;Connect Timeout=30";
-            SqlConnection con = new SqlConnection(constr);
+            SqlConnection con = new SqlConnection(CONSTR);
             con.Open();
             try
             {
@@ -200,8 +205,7 @@ namespace ItemListLivet.Model
         {
             Item item = null;
 
-            String constr = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\user\\Documents\\Visual Studio 2015\\test.mdf\";Integrated Security=True;Connect Timeout=30";
-            SqlConnection con = new SqlConnection(constr);
+            SqlConnection con = new SqlConnection(CONSTR);
             con.Open();
             try
             {
@@ -255,8 +259,7 @@ namespace ItemListLivet.Model
         public static void updateItem(int id, String itemName, string category, int price, String createUser)
         {
 
-            String constr = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\user\\Documents\\Visual Studio 2015\\test.mdf\";Integrated Security=True;Connect Timeout=30";
-            SqlConnection con = new SqlConnection(constr);
+            SqlConnection con = new SqlConnection(CONSTR);
             con.Open();
             try
             {
@@ -270,6 +273,59 @@ namespace ItemListLivet.Model
                 com.Parameters.Add(new SqlParameter("@CreateUser", createUser));
                 com.Parameters.Add(new SqlParameter("@Id", id));
                 
+                int count = com.ExecuteNonQuery();
+
+            }
+            finally
+            {
+                con.Close();
+            }
+
+            return;
+
+        }
+
+        public static void insertItem(String itemName, string category, int price, String createUser)
+        {
+
+            SqlConnection con = new SqlConnection(CONSTR);
+            con.Open();
+            try
+            {
+
+                SqlCommand com = con.CreateCommand();
+                com.CommandText = @"INSERT INTO Item (itemName, price, category, createUser) VALUES (@ItemName, @Price, @Category, @CreateUser)";
+
+                com.Parameters.Add(new SqlParameter("@ItemName", itemName));
+                com.Parameters.Add(new SqlParameter("@Category", category));
+                com.Parameters.Add(new SqlParameter("@Price", price));
+                com.Parameters.Add(new SqlParameter("@CreateUser", createUser));
+
+                int count = com.ExecuteNonQuery();
+
+            }
+            finally
+            {
+                con.Close();
+            }
+
+            return;
+
+        }
+
+        public static void deleteItem(int id)
+        {
+
+            SqlConnection con = new SqlConnection(CONSTR);
+            con.Open();
+            try
+            {
+
+                SqlCommand com = con.CreateCommand();
+                com.CommandText = @"delete from Item where id = @Id";
+                com.Parameters.Add(new SqlParameter("@Id", id));
+
+
                 int count = com.ExecuteNonQuery();
 
             }

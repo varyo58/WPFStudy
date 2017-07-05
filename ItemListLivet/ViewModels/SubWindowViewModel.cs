@@ -12,13 +12,23 @@ namespace ItemListLivet.ViewModels
     class SubWindowViewModel : ViewModel
     {
 
+        private int mode;// 1:新規、2:更新
+        public int Mode
+        {
+            get { return mode; }
+        }
 
+        public SubWindowViewModel()
+        {
+            mode = 1;
+            this.Item = new Item();
+        }
         public SubWindowViewModel(int id)
         {
+            mode = 2;
             this.Item = Item.getItemById(id);
         }
 
-        //private Item origin;
         private Item item;
         public Item Item
         {
@@ -42,26 +52,43 @@ namespace ItemListLivet.ViewModels
             }
         }
 
-        private ViewModelCommand updateCommand;
+        //private ViewModelCommand updateCommand;
+        //public ViewModelCommand UpdateCommand
+        //{
+        //    get
+        //    {
+        //        if (updateCommand == null)
+        //        {
+        //            updateCommand = new ViewModelCommand(Update);
+        //        }
+        //        return updateCommand;
+        //    }
+        //}
 
-        public ViewModelCommand UpdateCommand
+
+        private ViewModelCommand upsertCommand;
+        public ViewModelCommand UpsertCommand
         {
             get
             {
-                if (updateCommand == null)
+                if (upsertCommand == null)
                 {
-                    updateCommand = new ViewModelCommand(Update);
+                    switch (mode)
+                    {
+                        case 1:
+                            upsertCommand = new ViewModelCommand(Insert);
+                            break;
+                        case 2:
+                            upsertCommand = new ViewModelCommand(Update);
+                            break;
+                    }
                 }
-                return updateCommand;
+                return upsertCommand;
             }
         }
 
-        public void Update()
+        private void Update()
         {
-            //origin.ItemName = item.ItemName;
-            //origin.Category = item.Category;
-            //origin.Price = item.Price;
-            //origin.CreateUser = item.CreateUser;
 
             Item.updateItem(this.Item.Id, this.Item.ItemName, this.Item.Category.ToString(), this.Item.Price, this.Item.CreateUser);
 
@@ -69,6 +96,14 @@ namespace ItemListLivet.ViewModels
 
         }
 
+        private void Insert()
+        {
+
+            Item.insertItem(this.Item.ItemName, this.Item.Category.ToString(), this.Item.Price, this.Item.CreateUser);
+
+            Messenger.Raise(new WindowActionMessage(WindowAction.Close, "Close"));
+
+        }
 
 
     }

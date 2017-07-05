@@ -14,11 +14,17 @@ namespace ItemListLivet.Model
 
         public Items()
         {
-            itemList = new ObservableCollection<Item>(Item.getItemList());
-            Init_Item_PropertyChanged();
-            itemList.CollectionChanged += ItemList_CollectionChanged;
+            init();
         }
 
+        public void init()
+        {
+            ItemList = new ObservableCollection<Item>(Item.getItemList());
+            Init_Item_PropertyChanged();
+            ItemList.CollectionChanged += ItemList_CollectionChanged;
+        }
+
+        // ItemList内部のitemの変更時に合計の再計算をするようにイベントを追加
         private void ItemList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Replace)
@@ -70,7 +76,7 @@ namespace ItemListLivet.Model
             {
                 this.itemList = value;
                 this.TotalPrice = ItemList.Select(d => d.Price).Sum();
-                //RaisePropertyChanged("Items");
+                //RaisePropertyChanged("ItemList");
             }
         }
         private int totalPrice;
