@@ -1,0 +1,115 @@
+﻿<Window x:Class="ValidationSample.View.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:ValidationSample.ViewModel"
+        xmlns:vr="clr-namespace:ValidationSample.ValidationRules"
+        Title="Validationさんぷる" Height="600" Width="800">
+    <Window.DataContext>
+        <vm:MainViewModel />
+    </Window.DataContext>
+
+    <Window.Resources>
+        <!--TextBoxの右側にエラーメッセージを表示-->
+        <ControlTemplate x:Key="ErrorTemplate">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Right" Foreground="Red" Margin="5,0"
+                           Text="{Binding ElementName=adornedElement, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"/>
+
+                <!--AdornedElementPlaceholderはErrorTemplateが適用される要素のことです-->
+                <Border BorderBrush="Red" BorderThickness="1"
+                        Width="{Binding ElementName=adornedElement, Path=ActualWidth}"
+                        Height="{Binding ElementName=adornedElement, Path=ActualHeight}">
+                    <AdornedElementPlaceholder Name="adornedElement"/>
+                </Border>
+            </DockPanel>
+        </ControlTemplate>
+
+        <!--ツールチップにエラーメッセージを表示する-->
+        <Style x:Key="ToolTipErrorStyle" TargetType="{x:Type TextBox}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip">
+                        <Setter.Value>
+                            <Binding RelativeSource="{RelativeSource Self}" Path="(Validation.Errors)[0].ErrorContent"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <ControlTemplate x:Key="ValidationTemplate">
+            <StackPanel>
+                <ItemsControl ItemsSource="{Binding AdornedElement.(Validation.Errors), ElementName=adornedelem}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Foreground="Red" Text="{Binding ErrorContent}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <AdornedElementPlaceholder x:Name="adornedelem" />
+            </StackPanel>
+        </ControlTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="297*"/>
+            <ColumnDefinition Width="109*"/>
+            <ColumnDefinition Width="366*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="429*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+
+        <Label Content="いろいろなValidationのサンプル" Grid.Column="1" Grid.Row="1" Cursor="Hand" IsEnabled="False" FontSize="16" FontFamily="Meiryo">
+            <Label.Effect>
+                <DropShadowEffect/>
+            </Label.Effect>
+        </Label>
+
+        <Label Content="例外を使った方法：" Grid.Column="1" Grid.Row="2"/>
+        <TextBox Grid.Column="2" Grid.Row="2" TextWrapping="Wrap"
+                 Text="{Binding Value1, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
+                 Style="{StaticResource ToolTipErrorStyle}"
+                 Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
+
+        <Label Content="IDataErrorInfoを使った方法：" Grid.Column="1" Grid.Row="3"/>
+        <TextBox Grid.Column="2" Grid.Row="3" TextWrapping="Wrap"
+                 Text="{Binding Value2, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                 Style="{StaticResource ToolTipErrorStyle}"
+                 Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
+
+        <Label Content="ValidationRuleを使った方法：" Grid.Column="1" Grid.Row="4" />
+        <TextBox Grid.Column="2" Grid.Row="4" TextWrapping="Wrap" 
+                 Style="{StaticResource ToolTipErrorStyle}"
+                 Validation.ErrorTemplate="{StaticResource ErrorTemplate}">
+            <TextBox.Text>
+                <Binding Path="Value3" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules>
+                        <vr:TextBoxValidationRule MinValue="0" MaxValue="100" />
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+
+        <Label Content="CustomValdation属性を使った方法：" Grid.Column="1" Grid.Row="5" />
+        <TextBox Grid.Column="2" Grid.Row="5" TextWrapping="Wrap"
+                 Text="{Binding Value4, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, NotifyOnValidationError=True}"
+                 Style="{StaticResource ToolTipErrorStyle}"
+                 Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
+
+        <Button Content="Check" Grid.Column="3" HorizontalAlignment="Left" Margin="90,83,0,0" Grid.Row="6" VerticalAlignment="Top" Width="75"
+                Command="{Binding CheckCommand}" Height="24" />
+        
+
+    </Grid>
+</Window>
