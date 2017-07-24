@@ -1,0 +1,384 @@
+﻿<Window x:Class="ViewSample.View.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" 
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:ViewSample.ViewModel"
+        xmlns:cm="clr-namespace:ViewSample.Common"
+        xmlns:b="clr-namespace:ViewSample.Behavior"
+        Title="{Binding count, StringFormat={}Viewさんぷる（{0:N0}回目の実行）}"
+        Height="800" Width="1200"
+        WindowState="Maximized"
+        >
+    <Window.DataContext>
+        <vm:MainViewModel />
+    </Window.DataContext>
+    <Window.Resources>
+        <cm:EnumToBooleanConverter x:Key="EnumConverter" />
+        <CollectionViewSource x:Key="genderSource" Source="{Binding Genders}" />
+        <DataTemplate x:Key="PersonViewTemplate" DataType="{x:Type vm:Person}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="名前：" />
+                <TextBlock Text="{Binding NameDisp}" Grid.Column="1"/>
+                <TextBlock Text="年齢：" Grid.Column="2"/>
+                <TextBlock Text="{Binding Age}" Grid.Column="3" />
+                <TextBlock Text="チェック：" Grid.Column="4" />
+                <TextBlock Text="-" Grid.Column="5" Name="chk" />
+                <TextBlock Text="性別：" Grid.Column="6" />
+                <TextBlock Text="-" Grid.Column="7" Name="gen" />
+            </Grid>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding Check}" Value="True">
+                    <Setter TargetName="chk" Property="Text" Value="OK" />
+                    <Setter TargetName="chk" Property="Foreground" Value="Blue" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Check}" Value="False">
+                    <Setter TargetName="chk" Property="Text" Value="NG" />
+                    <Setter TargetName="chk" Property="Foreground" Value="Red" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Gender}" Value="Men">
+                    <Setter TargetName="gen" Property="Text" Value="男性" />
+                    <Setter TargetName="gen" Property="Foreground" Value="Blue" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Gender}" Value="Women">
+                    <Setter TargetName="gen" Property="Text" Value="女性" />
+                    <Setter TargetName="gen" Property="Foreground" Value="Red" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="435*"/>
+            <ColumnDefinition Width="358*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <!--<Border BorderBrush="Gray" BorderThickness="2" />
+        <Border BorderBrush="Gray" BorderThickness="2,0,2,1" Grid.Row="1"/>
+        <Border BorderBrush="Gray" BorderThickness="0,2,2,2" Grid.Column="1"/>
+        <Border BorderBrush="Gray" BorderThickness="0,0,2,2" Grid.Row="1" Grid.Column="1"/>-->
+
+        <Menu Height="30" VerticalAlignment="Top" >
+            <MenuItem Header="File(_F)" Width="308">
+                <MenuItem Header="Close(_X)" Click="Close_Click" />
+            </MenuItem>
+        </Menu>
+        <ToolBar Grid.Column="1">
+            <Button Content="ツールバー" />
+            <Button Content="A" />
+            <Button Content="B" />
+            <Button Content="C" />
+            <Button Content="D" />
+        </ToolBar>
+        <ToolBar Header="検索" Grid.Column="2">
+            <TextBox Width="80" />
+            <Button Width="30" Content="移動" />
+        </ToolBar>
+
+
+        <Label Content="テンプレートとか" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Margin="0,10,0,0" Grid.Row="1" />
+        <StackPanel HorizontalAlignment="Left" Height="109" Margin="10,63,0,0" VerticalAlignment="Top" Width="380" Grid.Row="1">
+            <StackPanel.Resources>
+                <Style TargetType="Button" x:Key="ButtonTemplate">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Grid>
+                                    <Rectangle Name="rect" Fill="Aquamarine" Height="25" Stroke="CadetBlue" RadiusX="5" RadiusY="5" StrokeThickness="2"/>
+                                    <!--ContentPresenterでContentプロパティの値を表示させる-->
+                                    <!--<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />-->
+                                    <!--TemplateBindingでContentプロパティの値を渡すことも可能-->
+                                    <Label Name="label" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="rect" Property="Fill" Value="White" />
+                                        <Setter TargetName="label" Property="Foreground" Value="CadetBlue" />
+                                    </Trigger>
+                                    <Trigger Property="IsFocused" Value="True">
+                                        <Setter TargetName="rect" Property="Fill" Value="White" />
+                                        <Setter TargetName="label" Property="Foreground" Value="CadetBlue" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style TargetType="Button" x:Key="ButtonTemplate2">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Grid>
+                                    <Rectangle Name="rect" Fill="{TemplateBinding Property=Background}" Stroke="{TemplateBinding Property=BorderBrush}" Height="25" RadiusX="5" RadiusY="5" StrokeThickness="2"/>
+                                    <!--TemplateBindingでContentプロパティの値を渡すことも可能-->
+                                    <Label Name="label" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Light"  FontSize="10"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </StackPanel.Resources>
+
+            <Button Content="普通のボタン"   Width="200" Height="25" />
+            <Button Content="Button" >
+                <Button.Template>
+                    <ControlTemplate>
+                        <Grid >
+                            <Rectangle Fill="NavajoWhite" Height="25" RadiusX="5" RadiusY="5" />
+                            <Label HorizontalAlignment="Center">コントロールテンプレートでカスタマイズしたボタン</Label>
+                        </Grid>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Content="Styleでコントロールテンプレートを指定したボタン" Height="25" Style="{StaticResource ButtonTemplate}" />
+            <Button Content="コントロールテンプレートにテンプレートバインディングでパラメーターを渡す" Height="25" Style="{StaticResource ButtonTemplate2}" Background="LightBlue" BorderBrush="DarkBlue"/>
+        </StackPanel>
+
+        <Label Content="Applicationオブジェクトの利用" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Margin="10,203,0,0" Grid.Row="1" />
+        <Button Content="空のウィンドウを開く(_O)" Command="{Binding OpenWindowCommand}" HorizontalAlignment="Left" Margin="16,255,0,0" VerticalAlignment="Top" Width="170" Grid.Row="1"/>
+        <Button Content="現在のサブウィンドウの数(_P)" Command="{Binding WindowCountCommand}" HorizontalAlignment="Left" Margin="16,291,0,0" VerticalAlignment="Top" Width="170" Grid.Row="1"/>
+        <TextBlock HorizontalAlignment="Left" Height="53" Margin="198,262,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="192"
+            Text="Application.Currentにウィンドウの数などの現在のアプリケーションの状態を保持している。" FontSize="10" Grid.Row="1" />
+
+
+
+        <Label Content="ラジオボタンのサンプル" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Grid.Row="2" Margin="0,10,0,0" />
+        <TextBlock HorizontalAlignment="Left" Height="46" Margin="16,44,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="366"
+                   Text="通常はラジオボタン一つに対してバインド用のBoolean型の変数を用意しなければなりませんが、コンバーターを使うことで一つのEnum変数をラジオボタンのグループにバインドすることができます。" FontSize="10" />
+
+        <GroupBox Header="主食" HorizontalAlignment="Left" Margin="16,122,0,0" Grid.Row="2" VerticalAlignment="Top" Height="78" Width="147">
+            <StackPanel Grid.Row="1">
+                <RadioButton GroupName="Food1" Content="ごはん" IsChecked="{Binding SyuSyoku, ConverterParameter=ごはん, Converter={StaticResource EnumConverter}}"/>
+                <RadioButton GroupName="Food1" Content="パン" IsChecked="{Binding SyuSyoku, ConverterParameter=パン, Converter={StaticResource EnumConverter}}"/>
+                <RadioButton GroupName="Food1" Content="カレーライス" IsChecked="{Binding SyuSyoku, ConverterParameter=カレーライス, Converter={StaticResource EnumConverter}}"/>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="汁物" HorizontalAlignment="Left" Margin="186,122,0,0" Grid.Row="2" VerticalAlignment="Top" Height="78" Width="123">
+            <StackPanel Grid.Row="1">
+                <RadioButton GroupName="Food2" Content="みそしる" IsChecked="{Binding Shirumono, ConverterParameter=みそしる, Converter={StaticResource EnumConverter}}"/>
+                <RadioButton GroupName="Food2" Content="スープ" IsChecked="{Binding Shirumono, ConverterParameter=スープ, Converter={StaticResource EnumConverter}}"/>
+                <RadioButton GroupName="Food2" Content="うどん" IsChecked="{Binding Shirumono, ConverterParameter=うどん, Converter={StaticResource EnumConverter}}"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="おかず" HorizontalAlignment="Left" Margin="16,218,0,0" Grid.Row="2" VerticalAlignment="Top" Height="77" Width="147">
+            <StackPanel Grid.Row="1">
+                <RadioButton GroupName="Food3" Content="焼き魚" IsChecked="{Binding Okazu, ConverterParameter=焼き魚, Converter={StaticResource EnumConverter}}"/>
+                <RadioButton GroupName="Food3" Content="ハンバーグ" IsChecked="{Binding Okazu, ConverterParameter=ハンバーグ, Converter={StaticResource EnumConverter}}"/>
+                <RadioButton GroupName="Food3" Content="ステーキ" IsChecked="{Binding Okazu, ConverterParameter=ステーキ, Converter={StaticResource EnumConverter}}"/>
+            </StackPanel>
+        </GroupBox>
+        <Button Content="和食セット" Command="{Binding SetWaCommand}" HorizontalAlignment="Left" Margin="186,226,0,0" Grid.Row="2" VerticalAlignment="Top" Width="75"/>
+        <Button Content="洋食セット" Command="{Binding SetYouCommand}" HorizontalAlignment="Left" Margin="280,226,0,0" Grid.Row="2" VerticalAlignment="Top" Width="76"/>
+        <Button Content="満腹セット" Command="{Binding SetManpukuCommand}" HorizontalAlignment="Left" Margin="186,271,0,0" Grid.Row="2" VerticalAlignment="Top" Width="75"/>
+
+        <Label Content="コレクション表示いろいろ" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Margin="13,10,0,0" Grid.Row="1" />
+        <StackPanel Grid.Column="1" HorizontalAlignment="Left" Height="314" Margin="16,46,0,0" Grid.Row="1" VerticalAlignment="Top" Width="408">
+            <ContentControl ContentTemplate="{StaticResource PersonViewTemplate}" Content="{Binding Persons}"  />
+            <TabControl Grid.Column="1" Grid.Row="1">
+                <TabItem Header="ListBox1">
+                    <StackPanel>
+                        <Label Content="ListBox(テンプレート未使用。オブジェクトが文字列として表示される)" />
+                        <ListBox IsSynchronizedWithCurrentItem="True"
+                        ItemsSource="{Binding Persons}" Height="200"/>
+
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="ListBox2">
+                    <StackPanel>
+                        <Label Content="ListBox(ItemTemplateで見た目を指定している)" />
+                        <ListBox IsSynchronizedWithCurrentItem="True"
+                 ItemsSource="{Binding Persons}" ItemTemplate="{StaticResource PersonViewTemplate}" Height="200"/>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="ListView">
+                    <StackPanel>
+                        <Label Content="ListView" />
+                        <ListView ItemsSource="{Binding Persons}" IsSynchronizedWithCurrentItem="True" Height="200">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="名前" DisplayMemberBinding="{Binding Name}"/>
+                                    <GridViewColumn Header="年齢" DisplayMemberBinding="{Binding Age}"/>
+                                    <GridViewColumn Header="チェック" DisplayMemberBinding="{Binding Check}"/>
+                                    <GridViewColumn Header="性別" DisplayMemberBinding="{Binding Gender}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="DataGrid1">
+                    <StackPanel>
+                        <Label Content="DataGrid(Columnを自動生成)" />
+                        <DataGrid ItemsSource="{Binding Persons}" IsSynchronizedWithCurrentItem="True" Height="200" />
+
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="DataGrid2">
+                    <StackPanel>
+                        <Label Content="DataGrid(Columnをカスタマイズ)" />
+                        <DataGrid ItemsSource="{Binding Persons}" IsSynchronizedWithCurrentItem="True"
+                                  AutoGenerateColumns="False" Height="200"  >
+                            <DataGrid.Resources>
+                                <Style x:Key="headerStyle" TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                </Style>
+                                <Style x:Key="cellStyle" TargetType="{x:Type DataGridCell}">
+                                    <Setter Property="Background" Value="AliceBlue" />
+                                </Style>
+                                <DataTemplate x:Key="headerTemplate">
+                                    <StackPanel>
+                                        <TextBlock Text="名前" />
+                                        <Separator />
+                                        <TextBlock Text="読み" />
+                                    </StackPanel>
+                                </DataTemplate>
+                                <DataTemplate x:Key="cellTemplate">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Name}" />
+                                        <Separator />
+                                        <TextBlock Text="{Binding Yomi}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="名前" Binding="{Binding Name}" />
+                                <DataGridComboBoxColumn Header="性別" SelectedValueBinding="{Binding Gender}" ItemsSource="{Binding Source={StaticResource genderSource}}"/>
+                                <DataGridTemplateColumn HeaderTemplate="{StaticResource headerTemplate}" 
+                                                    CellTemplate="{StaticResource cellTemplate}"
+                                                    HeaderStyle="{StaticResource headerStyle}"
+                                                    CellStyle="{StaticResource cellStyle}" />
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
+        </StackPanel>
+
+
+
+
+        <Label Content="添付プロパティ・ビヘイビアいろいろ" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Grid.Column="2" Margin="10,10,0,0" Grid.Row="1" />
+        <StackPanel Background="AliceBlue" Grid.Column="2" HorizontalAlignment="Left" Height="298" Margin="10,41,0,0" VerticalAlignment="Top" Width="338" Grid.Row="1">
+            <Label Content="添付ビヘイビアでプレースホルダを実現"/>
+            <TextBox Text="" b:PlaceHolderBehavior.PlaceHolderText="なにか入力してください。"/>
+            <Label Content="クリックでコマンド実行するビヘイビア" b:ExecuteCommandBehavior.ClickCommand="{Binding TestCommand}"/>
+            <TextBox Text="ああ" b:ExecuteCommandBehavior.ClickCommand="{Binding TestCommand}"/>
+            <Label Content="フォーカスアウトでコマンド実行するビヘイビア" />
+            <TextBox Text="いい" b:ExecuteCommandBehavior.LostFocusCommand="{Binding TestCommand}"/>
+            <Separator/>
+            <Label Content="入力制限(数値のみ)" />
+            <TextBox Text="" b:TextBoxBehaviors.IsNumeric="True"/>
+            <Label Content="フォーカスアウト時にNGワードが入っているかチェック" />
+            <TextBox Text="" b:TextBoxBehaviors.NgWord="NG" />
+
+        </StackPanel>
+
+        <Button Content="ドキュメントビューアー" Grid.Column="2" HorizontalAlignment="Left" Margin="10,16,0,0" Grid.Row="2" VerticalAlignment="Top" Width="166" Click="FileOpenButton_Click"/>
+        <FlowDocumentReader Name="flowDoc" Background="AliceBlue" Grid.Column="2"  Margin="10,49,10,10" Grid.Row="2" />
+        <GroupBox Grid.Column="1" Header="RichTextBox" HorizontalAlignment="Left" Margin="13,14,0,0" Grid.Row="2" VerticalAlignment="Top" Height="162" Width="178">
+            <StackPanel>
+                <RichTextBox x:Name="rtb" SelectionBrush="Red" HorizontalAlignment="Left" Height="94" VerticalAlignment="Top">
+                    <FlowDocument FontSize="20">
+                        <Paragraph>
+                            <Run Text="RichTextBox"/>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+                <Button  Content="Bold" Click="Bold_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74"/>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Grid.Column="1" Header="InkCanvas" HorizontalAlignment="Left" Height="89" Margin="16,212,0,0" Grid.Row="2" VerticalAlignment="Top" Width="196">
+            <InkCanvas Background="Beige" />
+        </GroupBox>
+        <GroupBox Grid.Column="1" Header="Popup" HorizontalAlignment="Left" Margin="222,14,0,0" Grid.Row="2" VerticalAlignment="Top" Height="54" Width="117">
+            <Button  Content="PopUp" Click="PopUp_Click"/>
+        </GroupBox>
+        <Popup AllowsTransparency="True" PopupAnimation="Scroll"  Placement="Center" Name="popup" IsOpen="False">
+            <Grid Background="Transparent">
+                <!--<Button Content="Popup!" Width="200" Height="40"/>-->
+                <Ellipse Width="200" Height="200" Fill="#550000FF"/>
+                <TextBlock Text="PopUp" TextAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+        </Popup>
+        <GroupBox Grid.Column="1" Header="イベントトリガー" HorizontalAlignment="Left" Margin="222,94,0,0" Grid.Row="2" VerticalAlignment="Top" Height="106" Width="162">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30*"/>
+                    <ColumnDefinition Width="30*"/>
+                    <ColumnDefinition Width="30*"/>
+                    <ColumnDefinition Width="30*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="21*"/>
+                    <RowDefinition Height="59*"/>
+                </Grid.RowDefinitions>
+                <Rectangle Fill="Red" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                            <ei:ChangePropertyAction TargetName="regularPolygon" PropertyName="Fill" Value="Red">
+                            </ei:ChangePropertyAction>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Rectangle>
+                <Rectangle Fill="Blue"  Grid.Column="1">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                            <ei:ChangePropertyAction TargetName="regularPolygon" PropertyName="Fill" Value="Blue">
+                            </ei:ChangePropertyAction>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Rectangle>
+                <Rectangle Fill="Green"  Grid.Column="2">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                            <ei:ChangePropertyAction TargetName="regularPolygon" PropertyName="Fill" Value="Green">
+                            </ei:ChangePropertyAction>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Rectangle>
+                <Rectangle Fill="Pink"  Grid.Column="3">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                            <ei:ChangePropertyAction TargetName="regularPolygon" PropertyName="Fill" Value="Pink">
+                            </ei:ChangePropertyAction>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Rectangle>
+                <ed:RegularPolygon x:Name="regularPolygon" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                    Fill="#FFF4F4F5" InnerRadius="0.5" PointCount="5" Stroke="Black"/>
+            </Grid>
+
+
+
+
+        </GroupBox>
+        <GroupBox Grid.Column="1" Header="テーマの変更" HorizontalAlignment="Left" Margin="222,218,0,0" Grid.Row="2" VerticalAlignment="Top" Height="52" Width="162">
+            <CheckBox x:Name="checkBox1" Content="ボタンのテーマ変更"
+                  IsChecked="False"
+                  Checked="checkBox1_Checked"
+                  Unchecked="checkBox1_Checked" RenderTransformOrigin="0.115,3.611"
+                  />
+        </GroupBox>
+
+
+
+
+    </Grid>
+</Window>
